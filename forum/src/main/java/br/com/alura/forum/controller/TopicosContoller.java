@@ -4,9 +4,12 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +26,7 @@ import br.com.alura.forum.repository.cursoRepository;
 
 @RestController
 @RequestMapping("/topicos")
+@Validated
 public class TopicosContoller {
 	
 	@Autowired
@@ -44,7 +48,7 @@ public class TopicosContoller {
 	}
 	
 	@PostMapping
-	public ResponseEntity<TopicoDto> cadastrar(@RequestBody TopicoForm form, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<TopicoDto> cadastrar(@RequestBody @Valid TopicoForm form, UriComponentsBuilder uriBuilder) {
 		Topico topico = form.converter(cursoRepository);
 		topicoRepository.save(topico);
 		URI uri =  uriBuilder.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();
